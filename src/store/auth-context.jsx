@@ -8,8 +8,8 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
-  const initialState = localStorage.getItem("token");
-  const [token, setToken] = useState(initialState);
+  const initialToken = localStorage.getItem("token");
+  const [token, setToken] = useState(initialToken);
 
   const userIsLoggedIn = !!token;
 
@@ -32,6 +32,7 @@ export const AuthContextProvider = (props) => {
         alert("You have been logged out due to inactivity.");
       }, 5 * 60 * 1000);
     }
+
     return () => clearTimeout(logoutTimer);
   }, [userIsLoggedIn]);
 

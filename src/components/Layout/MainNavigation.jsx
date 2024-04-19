@@ -1,11 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import AuthContext from "../../Store/AuthContext";
+import AuthContext from "../../store/auth-context";
 import classes from "./MainNavigation.module.css";
 
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const isLoggedIn = authCtx.isLoggedIn;
@@ -15,11 +16,18 @@ const MainNavigation = () => {
     navigate("./auth");
   };
 
+  useEffect(() => {
+    navigate("./");
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (!isLoggedIn) navigate("./auth");
+  }, [isLoggedIn]);
+
   return (
     <header className={classes.header}>
-      <Link to="/">
-        <div className={classes.logo}>Expense Tracker</div>
-      </Link>
+      <div className={classes.logo}>Expense Tracker</div>
+
       <nav>
         <ul>
           {!isLoggedIn && (
