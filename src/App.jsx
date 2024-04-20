@@ -13,7 +13,7 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          {authCtx.isLoggedIn && <Route path="/" element={<HomePage />} />}
+          <Route path="/" element={<HomePage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/profile" element={<UserProfile />} />
         </Routes>

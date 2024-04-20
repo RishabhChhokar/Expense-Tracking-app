@@ -17,7 +17,7 @@ const MainNavigation = () => {
   };
 
   useEffect(() => {
-    navigate("./");
+    if (isLoggedIn) navigate("./");
   }, [isLoggedIn]);
 
   useEffect(() => {
@@ -33,11 +33,6 @@ const MainNavigation = () => {
           {!isLoggedIn && (
             <li>
               <Link to="/auth">Login</Link>
-            </li>
-          )}
-          {isLoggedIn && (
-            <li>
-              <Link to="/profile">Profile</Link>
             </li>
           )}
           {isLoggedIn && (

@@ -1,56 +1,77 @@
 import { useRef, useContext } from "react";
+
 import AuthContext from "../../store/auth-context";
 import classes from "./ProfileForm.module.css";
+import { useNavigate } from "react-router-dom";
 
 const ProfileForm = () => {
-  const newPasswordInputRef = useRef();
+  const fullNameInputRef = useRef();
+  const profileUrlInputRef = useRef();
   const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const submitHandler = async (event) => {
+  const cancelHandler = () => {
+    navigate("/");
+  };
+
+  const updateProfile = (event) => {
     event.preventDefault();
 
-    const enteredNewPassword = newPasswordInputRef.current.value;
+    const enteredName = fullNameInputRef.current.value;
+    const enteredPhotoURL = profileUrlInputRef.current.value;
 
-    const url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
-
-    try {
-      const response = await fetch(url, {
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0",
+      {
         method: "POST",
-        body: JSON.stringify({
-          idToken: authCtx.token,
-          password: enteredNewPassword,
-          returnSecureToken: false,
-        }),
         headers: {
           "Content-Type": "application/json",
         },
-      });
-
-      if (!response.ok) {
-        throw new Error("Password update failed!");
+        body: JSON.stringify({
+          idToken: authCtx.token,
+          displayName: enteredName,
+          photoUrl: enteredPhotoURL,
+          returnSecureToken: true,
+        }),
       }
-      
-    } catch (error) {
-      alert(error.message);
-    }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    fullNameInputRef.current.value = "";
+    profileUrlInputRef.current.value = "";
   };
 
   return (
-    <form className={classes.form} onSubmit={submitHandler}>
-      <div className={classes.control}>
-        <label htmlFor="new-password">New Password</label>
-        <input
-          type="password"
-          id="new-password"
-          minLength="7"
-          ref={newPasswordInputRef}
-        />
-      </div>
-      <div className={classes.action}>
-        <button>Change Password</button>
-      </div>
-    </form>
+    <div>
+      <form className={classes.form}>
+        <div className={classes.control}>
+          <label htmlFor="full-name">Full Name</label>
+          <input type="text" id="full-name" ref={fullNameInputRef} required />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor="photot-url">Profile Photo URL</label>
+          <input
+            type="text"
+            id="photot-url"
+            ref={profileUrlInputRef}
+            required
+          />
+        </div>
+        <div className={classes.action}>
+          <button onClick={updateProfile} className={classes.update}>
+            Update
+          </button>
+        </div>
+      </form>
+      <button onClick={cancelHandler} className={classes.cancel}>
+        Cancel
+      </button>
+    </div>
   );
 };
 

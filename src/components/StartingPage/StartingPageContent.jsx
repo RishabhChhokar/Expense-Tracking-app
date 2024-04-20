@@ -1,9 +1,22 @@
-import classes from './StartingPageContent.module.css';
+import { useNavigate } from 'react-router-dom';
+import './StartingPageContent.css';
+
+
 
 const StartingPageContent = () => {
+
+  const navigate = useNavigate();
+  const completeProfile = () => {
+    navigate("./profile");
+  }
   return (
-    <section className={classes.starting}>
-      <h1>Welcome to Expense Tracker.</h1>
+    <section>
+      <h2 id={"headOne"}>Welcome to Expense Tracker.</h2>
+      <h2 id={"headTwo"}>
+        Your profile is incomplete.
+        <button onClick={completeProfile}>Complete now</button>
+      </h2>
+      <hr />
     </section>
   );
 };

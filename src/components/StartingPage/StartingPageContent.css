@@ -1,0 +1,20 @@
+#headOne {
+  font-size: 1rem;
+  
+  width : 65%;
+  display: inline-block;
+}
+
+ #headTwo {
+  font-size: 1rem;
+  
+  width : 50%;
+  display: inline;
+}
+
+button {
+  margin : 0px;
+  color : blue;
+  border : none;
+  background-color: white;
+}
