@@ -1,6 +1,5 @@
 import { useState, useRef, useContext } from "react";
 import AuthContext from "../../store/auth-context";
-
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
@@ -16,50 +15,50 @@ const AuthForm = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-const submitHandler = async (event) => {
-  event.preventDefault();
+  const submitHandler = async (event) => {
+    event.preventDefault();
 
-  const enteredEmail = emailInputRef.current.value;
-  const enteredPassword = passwordInputRef.current.value;
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
 
-  setIsLoading(true);
+    setIsLoading(true);
 
-  let url;
-  if (isLogin) {
-    url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
-  } else {
-    url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
-  }
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        email: enteredEmail,
-        password: enteredPassword,
-        returnSecureToken: true,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      let errorMessage = "AUTHENTICATION FAILED!";
-      throw new Error(errorMessage);
+    let url;
+    if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
+    } else {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
     }
 
-    const data = await response.json();
-    authCtx.login(data.idToken);
-  } catch (err) {
-    alert(err);
-  }
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  setIsLoading(false);
-};
+      if (!response.ok) {
+        const data = await response.json();
+        let errorMessage = "AUTHENTICATION FAILED!";
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      authCtx.login(data.idToken);
+    } catch (err) {
+      alert(err);
+    }
+
+    setIsLoading(false);
+  };
 
   return (
     <section className={classes.auth}>
@@ -92,6 +91,9 @@ const submitHandler = async (event) => {
           </button>
         </div>
       </form>
+      {authCtx.isLoggedIn && !authCtx.isEmailVerified && (
+        <p>Check your email for a verification link.</p>
+      )}
     </section>
   );
 };

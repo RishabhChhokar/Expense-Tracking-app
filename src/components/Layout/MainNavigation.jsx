@@ -7,6 +7,16 @@ import classes from "./MainNavigation.module.css";
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
 
+  const handleEmailVerification = async () => {
+    try {
+      await authCtx.sendEmailVerification();
+      alert("Verification email sent! Please check your inbox.");
+    } catch (error) {
+      alert("Failed to send verification email. Please try again later.");
+      console.error("Verification email error:", error);
+    }
+  };
+
   const navigate = useNavigate();
 
   const isLoggedIn = authCtx.isLoggedIn;
@@ -17,7 +27,7 @@ const MainNavigation = () => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) navigate("./");
+    navigate("./");
   }, [isLoggedIn]);
 
   useEffect(() => {
@@ -38,6 +48,11 @@ const MainNavigation = () => {
           {isLoggedIn && (
             <li>
               <button onClick={logoutHandler}>Logout</button>
+            </li>
+          )}
+          {authCtx.isLoggedIn && !authCtx.isEmailVerified && (
+            <li>
+              <button onClick={handleEmailVerification}>Verify Email</button>
             </li>
           )}
         </ul>
