@@ -1,24 +1,33 @@
-import { useNavigate } from 'react-router-dom';
-import './StartingPageContent.css';
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../store/auth-context";
+import classes from "./StartingPageContent.module.css";
 
-
-
-const StartingPageContent = () => {
-
+const HomePage = () => {
+  const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
-  const completeProfile = () => {
+
+  const profileHandler = () => {
     navigate("./profile");
-  }
+  };
+
   return (
-    <section>
-      <h2 id={"headOne"}>Welcome to Expense Tracker.</h2>
-      <h2 id={"headTwo"}>
-        Your profile is incomplete.
-        <button onClick={completeProfile}>Complete now</button>
-      </h2>
-      <hr />
-    </section>
+    <>
+      {authCtx.isLoggedIn ? (
+        <div>
+          <section className={classes.starting}>
+            <p>Welcome to Expense Tracker!!!</p>
+            <div className="classes.profile">
+              <p>Your profile is incomplete.</p>
+              <button onClick={profileHandler}>Complete Now</button>
+            </div>
+          </section>
+        </div>
+      ) : (
+        <h1>Welcome to Expense Tracker!!!</h1>
+      )}
+    </>
   );
 };
 
-export default StartingPageContent;
+export default HomePage;
