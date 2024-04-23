@@ -16,16 +16,18 @@ const HomePage = () => {
       {authCtx.isLoggedIn ? (
         <div>
           <section className={classes.starting}>
-            <p>Welcome to Expense Tracker!!!</p>
+            <p style={{textAlign : "center",paddingTop : "5px",margin : "0px"}}>Welcome to Expense Tracker.</p>
             <div className="classes.profile">
-              <p>Your profile is incomplete.</p>
-              <button onClick={profileHandler}>Complete Now</button>
+              <p style={{margin : "0px"}}>
+                Your profile is incomplete.
+                <button style={{marginLeft : "20px", color : "white", backgroundColor :"darkblue"}} onClick={profileHandler}>Complete Now</button>
+              </p>
             </div>
           </section>
           <ExpenseTracker />
         </div>
       ) : (
-        <h1>Welcome to Expense Tracker!!!</h1>
+        <h1>Welcome to Expense Tracker.</h1>
       )}
     </>
   );

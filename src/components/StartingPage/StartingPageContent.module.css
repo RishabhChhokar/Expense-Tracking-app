@@ -1,15 +1,15 @@
 .starting {
   display: flex;
   justify-content: space-between;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 2px;
+  margin-right: 1px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 16px;
+  box-shadow: 0 1px 1px rgba(6, 5, 5, 0.2);
 }
 
 .profile {
   display: flex;
 }
-button {
-  color: blue;
-  background-color: white;
-  border: none;
-}
+
+
