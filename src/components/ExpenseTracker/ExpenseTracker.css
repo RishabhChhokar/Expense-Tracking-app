@@ -1,0 +1,45 @@
+.expense-tracker {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 10px;
+  font-family: 'Arial Narrow Bold', sans-serif;
+  width: 400px;
+  box-shadow: 0 1px 4px rgba(6, 5, 5, 0.2);
+  text-align: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.expense-form .form-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.expense-form .form-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.expense-form .form-select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.expense-form .form-button {
+  display: block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  left: 135px;
+}

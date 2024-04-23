@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./StartingPageContent.module.css";
-
+import ExpenseTracker from "../ExpenseTracker/ExpenseTracker";
 const HomePage = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const HomePage = () => {
               <button onClick={profileHandler}>Complete Now</button>
             </div>
           </section>
+          <ExpenseTracker />
         </div>
       ) : (
         <h1>Welcome to Expense Tracker!!!</h1>
