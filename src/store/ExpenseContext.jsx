@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { expenseActions } from "./expense-slice";
 
 const ExpenseContext = React.createContext({
   expenses: [],
@@ -10,6 +12,8 @@ const ExpenseContext = React.createContext({
 
 export const ExpenseContextProvider = (props) => {
   const [expenseItems, setExpenseItems] = useState([]);
+
+  const dispatch = useDispatch();
 
   let userEmail = localStorage.getItem("email");
   if (userEmail) {
@@ -38,6 +42,9 @@ export const ExpenseContextProvider = (props) => {
             moneySpent: expense.moneySpent,
           };
         });
+
+        dispatch(expenseActions.setItems(expenseList));
+
         setExpenseItems(expenseList);
       } catch (error) {
         console.log(error);
@@ -65,6 +72,8 @@ export const ExpenseContextProvider = (props) => {
         .then((data) => {
           item = { ...item, id: data.name };
           setExpenseItems([...expenseItems, item]);
+
+          dispatch(expenseActions.addItem(item));
         })
         .catch((error) => {
           console.log(error);
@@ -85,11 +94,14 @@ export const ExpenseContextProvider = (props) => {
         .then((response) => {
           if (response.ok) {
             console.log("Expense Updated");
+
             setExpenseItems((prevExpenseItems) =>
               prevExpenseItems.map((expense) =>
                 expense.id === updatedExpense.id ? updatedExpense : expense
               )
             );
+
+            dispatch(expenseActions.editItem({ item: updatedExpense }));
           } else {
             console.error("error while updating item");
           }
@@ -112,9 +124,12 @@ export const ExpenseContextProvider = (props) => {
         .then((response) => {
           if (response.ok) {
             console.log("Expense successfuly deleted");
+
             setExpenseItems((prevExpenseItems) =>
               prevExpenseItems.filter((expense) => expense.id !== expenseId)
             );
+
+            dispatch(expenseActions.removeItem({ id: expenseId }));
           } else {
             console.error("error while deleting item");
           }
