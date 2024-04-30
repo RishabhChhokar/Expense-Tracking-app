@@ -23,7 +23,7 @@ const ExpenseList = (props) => {
           {props.expenses.map((expense, index) => (
             <li key={index} className="expense-item">
               <div>
-                Amount Spent: {expense.moneySpent} <br />
+                Amount Spent: ₹ {expense.moneySpent} <br />
                 Description: {expense.description} <br />
                 Category: {expense.category}
               </div>

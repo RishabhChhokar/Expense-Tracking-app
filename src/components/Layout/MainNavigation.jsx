@@ -33,7 +33,7 @@ const MainNavigation = () => {
 
   const logoutHandler = () => {
     authCtx.logout();
-    navigate("./auth");
+    navigate("/auth");
   };
 
   return (
@@ -46,9 +46,9 @@ const MainNavigation = () => {
           {premium && (
             <li>
               <button onClick={toggleDarkModeHandler}>{`${
-                isDarkMode ? "Light Mode" : "Dark Mode"
+                isDarkMode ? '🔆' : '🌙'
               }`}</button>
-              <button onClick={downloadHandler}>Download Expenses</button>
+              <button onClick={downloadHandler}>⬇</button>
             </li>
           )}
           {!isLoggedIn && (

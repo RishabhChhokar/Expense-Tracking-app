@@ -1,5 +1,5 @@
 import { useState, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
 import VerifyEmail from "./VerifyEmail";
@@ -11,7 +11,6 @@ const AuthForm = () => {
   const confirmPasswordInputRef = useRef();
 
   const authCtx = useContext(AuthContext);
-  const navigate = useNavigate()
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,70 +21,69 @@ const AuthForm = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
-    if (!isLogin) {
-      const enteredPassword2 = confirmPasswordInputRef.current.value;
-      if (
-        enteredEmail &&
-        enteredPassword &&
-        enteredPassword2 &&
-        enteredPassword === enteredPassword2
-      ) {
-        setIsFormValid(true);
-      } else if (enteredPassword !== enteredPassword2) {
-        setError("Passwords didn't match");
-        console.log("Passwords didn't match");
-      } else {
-        setError("All Fields Are Required");
-        console.log("All Fields Are Required");
-      }
-    }
-
-    setIsLoading(true);
-    let URL;
-    if (isLogin) {
-      URL =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
-    } else if (isFormValid) {
-      URL =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
-    }
-    fetch(URL, {
-      method: "POST",
-      body: JSON.stringify({
-        email: enteredEmail,
-        password: enteredPassword,
-        returnSecureToken: true,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        if (res.ok) {
-          console.log("user created");
-          return res.json();
+    try {
+      if (!isLogin) {
+        const enteredPassword2 = confirmPasswordInputRef.current.value;
+        if (
+          enteredEmail &&
+          enteredPassword &&
+          enteredPassword2 &&
+          enteredPassword === enteredPassword2
+        ) {
+          setIsFormValid(true);
+        } else if (enteredPassword !== enteredPassword2) {
+          setError("Passwords didn't match");
+          console.log("Passwords didn't match");
+          return;
         } else {
-          return res.json().then((data) => {
-            let errorMessage = "Authentication failed!";
-            throw new Error(errorMessage);
-          });
+          setError("All Fields Are Required");
+          console.log("All Fields Are Required");
+          return;
         }
-      })
-      .then((data) => {
-        authCtx.login(data.idToken, data.email);
-        navigate("./");
-      })
-      .catch((err) => {
-        alert(err.message);
+      }
+
+      setIsLoading(true);
+      let URL;
+      if (isLogin) {
+        URL =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
+      } else if (isFormValid) {
+        URL =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0";
+      }
+
+      const response = await fetch(URL, {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      if (!response.ok) {
+        const data = await response.json();
+        let errorMessage = "Authentication failed!";
+        throw new Error(errorMessage);
+      }
+      const data = await response.json();
+      authCtx.login(data.idToken, data.email);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
 
   return (
     <section className={classes.auth}>
@@ -135,7 +133,7 @@ const AuthForm = () => {
             </div>
             {isLogin && (
               <div className={classes.link}>
-                <Link to="/forget-password">Forgot Password?</Link>
+                <Link style ={{color : "red"}} to="/forget-password">Forgot Password?</Link>
               </div>
             )}
             <div className={classes.actions}>

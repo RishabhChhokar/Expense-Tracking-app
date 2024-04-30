@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { authActions } from "./auth-slice";
-
+import { expenseActions } from "./expense-slice";
 const AuthContext = React.createContext({
   token: "",
   email: "",
   isLoggedIn: false,
-  login: (token) => {},
+  login: () => {},
   logout: () => {},
 });
 
@@ -15,8 +16,7 @@ export const AuthContextProvider = (props) => {
   const initialEmail = localStorage.getItem("email");
   const [token, setToken] = useState(initialToken);
   const [email, setEmail] = useState(initialEmail);
-
-
+  
   const dispatch = useDispatch();
 
   const userIsLoggedIn = !!token;
@@ -26,7 +26,6 @@ export const AuthContextProvider = (props) => {
     setEmail(email);
     localStorage.setItem("token", token);
     localStorage.setItem("email", email);
-
     
     dispatch(authActions.login({ email: email, token: token }));
   };
@@ -36,8 +35,11 @@ export const AuthContextProvider = (props) => {
     setEmail(null);
     localStorage.removeItem("token");
     localStorage.removeItem("email");
-
+    dispatch(expenseActions.setItemsEmpty());
     dispatch(authActions.logout());
+    if(localStorage.getItem("isDark") !== null){
+      localStorage.setItem("isDark","false")
+    }
   };
 
   useEffect(() => {

@@ -11,7 +11,7 @@ const ExpenseTracker = () => {
   const [category, setCategory] = useState("");
   const [editExpense, setEditExpense] = useState(false);
   const [editExpenseId, setEditExpenseId] = useState(false);
-
+  
   const dispatch = useDispatch();
 
   const items = useSelector((state) => state.expenseStore.items);
@@ -36,7 +36,14 @@ const ExpenseTracker = () => {
 
   const editExpenseHandler = (event) => {
     event.preventDefault();
-
+    if (
+      moneySpent.trim().length == 0 ||
+      description.trim().length == 0 ||
+      category.trim().trim().length == 0
+    ) {
+      alert("No Feild can be left Empty.");
+      return;
+    } 
     const editExpense = {
       id: editExpenseId,
       moneySpent,
@@ -54,7 +61,12 @@ const ExpenseTracker = () => {
 
   const expenseSubmitHandler = (e) => {
     e.preventDefault();
+    
 
+    if(moneySpent.trim().length == 0 || description.trim().length == 0 || category.trim().trim().length == 0 ){
+      alert("No Feild can be left Empty.");
+      return;
+    }  
     const newExpense = {
       moneySpent,
       description,

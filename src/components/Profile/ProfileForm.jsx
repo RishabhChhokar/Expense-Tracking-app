@@ -11,65 +11,74 @@ const ProfileForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idToken: authCtx.token,
-        }),
-      }
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idToken: authCtx.token,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const data = await response.json();
         const userData = data.users[0];
         fullNameInputRef.current.value = userData.displayName;
         profileUrlInputRef.current.value = userData.photoUrl;
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log(error);
-      });
-  }, []);
+      }
+    };
+
+    fetchUserData();
+  }, [authCtx.token]);
 
   const cancelHandler = () => {
     navigate("/");
   };
 
-  const updateProfile = (event) => {
+  const updateProfile = async (event) => {
     event.preventDefault();
 
     const enteredName = fullNameInputRef.current.value;
     const enteredPhotoURL = profileUrlInputRef.current.value;
 
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idToken: authCtx.token,
-          displayName: enteredName,
-          photoUrl: enteredPhotoURL,
-          returnSecureToken: true,
-        }),
+    try {
+      const response = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDBW667VYqKhnmvuSiUVDTGGlNQMVYDHT0",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idToken: authCtx.token,
+            displayName: enteredName,
+            photoUrl: enteredPhotoURL,
+            returnSecureToken: true,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
       }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        
-        console.log(data);
-      })
-      .catch((error) => {
-       
-        console.error(error);
-      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+
     fullNameInputRef.current.value = "";
     profileUrlInputRef.current.value = "";
   };
@@ -82,10 +91,10 @@ const ProfileForm = () => {
           <input type="text" id="full-name" ref={fullNameInputRef} required />
         </div>
         <div className={classes.control}>
-          <label htmlFor="photot-url">Profile Photot URL</label>
+          <label htmlFor="photot-url">Profile Photo URL</label>
           <input
             type="text"
-            id="photot-url"
+            id="photo-url"
             ref={profileUrlInputRef}
             required
           />

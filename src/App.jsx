@@ -11,11 +11,9 @@ import { useContext } from "react";
 import ForgetPassword from "./components/Auth/ForgetPassword";
 import { ExpenseContextProvider } from "./store/ExpenseContext";
 import { useSelector } from "react-redux";
-
 function App() {
   const authCtx = useContext(AuthContext);
   const isDarkMode = useSelector((state) => state.theme.isDark);
-
   return (
     <div className={`${isDarkMode ? "darkTheme" : ""}`}>
       <ExpenseContextProvider>

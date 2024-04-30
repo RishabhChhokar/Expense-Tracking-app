@@ -1,4 +1,4 @@
-import {describe, it, render, expect,screen, jest} from "viit";
+import {describe, it, render, expect,screen, jest} from "vitest";
 import userEvent from "@iting-library/user-event";
 import ExpenseTracker from "./components/ExpenseTracker/ExpenseTracker";
 import ProfileForm from "./components/Profile/ProfileForm";
