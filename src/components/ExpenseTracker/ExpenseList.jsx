@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useContext } from "react";
 import ExpenseContext from "../../store/ExpenseContext";
 import "./ExpenseList.css";
